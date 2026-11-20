@@ -1,5 +1,16 @@
 # @solidjs/signals
 
+## 2.0.4
+
+### Patch Changes
+
+- 543066e: A store array that an action replaces with a returned array, then pushes to after a `yield`, now maps the pushed row in `mapArray` and `<For>` instead of `undefined` (#5093).
+- 21bfd2d: Coalesce synchronous subscription bursts in `from()` before settling a pending pull.
+- 3774ebe: A declined optimistic edit now reverts in a list row that a `Show` is about to replace, at the same moment as everywhere else (#5077). Before, when the frame that would remove the old row was still waiting on another action, the row kept showing the declined value while a memo over the same store showed the truth.
+- b4212bf: A memo over an optimistic store now shows a fresh guess at the same moment as a binding over the same row, even when the memo also reads another list whose `refresh()` is still out (#5090). Before, the list row showed the guess while the memo kept the old value until the other list answered.
+- a4b4025: A `latest()` loading flag no longer stays `true` forever when a memo's branch creates a memo and a render effect that reads it (#5073). The render effect waited on the verdict lane's reveal, and the lane waited on that render effect.
+- 99db9bc: `refresh()` called while the same question's answer is still out no longer drops that answer (#5094). It waits for the answer to land, then re-asks once, however many times it was called meanwhile. Polling on an interval shorter than the response time now shows each answer, and other changes no longer wait behind the poll. A `refresh()` inside an action still re-asks at once in the action's hold.
+
 ## 2.0.3
 
 ### Patch Changes
